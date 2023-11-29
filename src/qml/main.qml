@@ -864,7 +864,64 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {// video
+     Rectangle {
+        id: reviewBtnFrame
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        height: 60
+        radius:90
+        width: 60
+        anchors.leftMargin: 50
+        anchors.bottomMargin: 35
+
+        Rectangle {
+            id: reviewBtn
+            width: parent.width
+            height: parent.height
+            radius: 90
+            color: "black" 
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Item {
+                    width: reviewBtn.width
+                    height: reviewBtn.height
+
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: reviewBtn.adapt ? reviewBtn.width : Math.min(reviewBtn.width, reviewBtn.height)
+                        height: reviewBtn.adapt ? reviewBtn.height : width
+                        radius: 90
+                    }
+                }
+            }
+
+            Image {
+                anchors.centerIn: parent
+                autoTransform: true
+                transformOrigin: Item.Center
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+                source:  (window.videoEnable)? mediaView.lastImg : ""
+                scale: Math.min(parent.width / width, parent.height / height)
+            }
+        }
+
+        Rectangle {
+            anchors.fill: reviewBtn
+            color: "transparent"
+            border.width: 2
+            border.color: "white"
+            radius: 90
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: mediaView.visible = true;
+            }
+        }
+    }
+
+    Rectangle { // video
         id: videoBtn
         height: 100
         width: 100
@@ -874,7 +931,7 @@ ApplicationWindow {
         anchors.bottomMargin: 15  
         visible: window.videoEnable
         
-        color: Qt.rgba(0, 0, 0, 0.6) // light black with 60% transparency
+        color: Qt.rgba(0, 0, 0, 0.6)
 
         Button {
             anchors.fill: videoBtn
@@ -913,7 +970,6 @@ ApplicationWindow {
             }
 
             onClicked: { // video
-                console.log("clicked")
                 window.videoState = 1 - window.videoState; 
                 handleVideoRecording()
             }
@@ -927,13 +983,13 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {// camera
+    Rectangle { // camera
         id: shutterBtn
         anchors.bottom: parent.bottom
         height: 125
         width: parent.width
         visible: window.camEnable
-        color: Qt.rgba(0, 0, 0, 0.6) // light black with 60% transparency
+        color: Qt.rgba(0, 0, 0, 0.6)
 
         Button {
             anchors.centerIn: parent
@@ -958,7 +1014,7 @@ ApplicationWindow {
             font.bold: true
             visible: true
 
-            background: Rectangle {// camera
+            background: Rectangle {
                 anchors.centerIn: parent
                 width: 100
                 height: 100
@@ -966,7 +1022,7 @@ ApplicationWindow {
                 radius: 70
             }
 
-            onClicked: { // camera 
+            onClicked: {
                 if (optionContainer.state == "opened" && delayTime.currentIndex > 0 && !backCamSelect.visible) {
                         optionContainer.state = "closed"
                         countDown = delayTime.currentIndex

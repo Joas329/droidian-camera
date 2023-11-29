@@ -372,13 +372,12 @@ ApplicationWindow {
         }
     }
 
-    PinchArea { //Area that controls the focus point and swipeView bar
+    PinchArea {
         width: parent.width
         height: parent.height * 0.85
         pinch.target: camZoom
         pinch.maximumScale: camera.maximumDigitalZoom / camZoom.zoomFactor
         pinch.minimumScale: 0
-        
 
         MouseArea {
             id: dragArea
@@ -841,6 +840,16 @@ ApplicationWindow {
     }
 
     Rectangle {
+        id: bottomFrame
+        anchors.bottom: parent.bottom
+        height: 125
+        width: parent.width
+        color: Qt.rgba(0, 0, 0, 0.6)
+        enabled: false
+    }
+
+
+    Rectangle {
         id: menuBtnFrame
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -859,7 +868,6 @@ ApplicationWindow {
             visible: drawer.position == 0.0 && optionContainer.state == "closed"
 
             background: Rectangle {
-
                 color: "black"
                 opacity: 0.4
             }
@@ -938,8 +946,6 @@ ApplicationWindow {
         anchors.horizontalCenter: parent.horizontalCenter 
         anchors.bottomMargin: 15  
         visible: window.videoEnable
-        
-        color: Qt.rgba(0, 0, 0, 0.6)
 
         Button {
             anchors.fill: videoBtn
@@ -993,11 +999,14 @@ ApplicationWindow {
 
     Rectangle { // camera
         id: shutterBtn
+        height: 100
+        width: 100
+        radius: 70
         anchors.bottom: parent.bottom
-        height: 125
-        width: parent.width
+        anchors.horizontalCenter: parent.horizontalCenter 
+        anchors.bottomMargin: 15  
+        
         visible: window.camEnable
-        color: Qt.rgba(0, 0, 0, 0.6)
 
         Button {
             anchors.centerIn: parent

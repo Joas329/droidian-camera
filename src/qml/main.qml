@@ -371,6 +371,17 @@ ApplicationWindow {
             camera.setDigitalZoom(scale * zoomFactor)
         }
     }
+    
+    Timer {
+        id: swappingDelay
+        interval: 400 
+        repeat: false 
+
+        onTriggered: {
+            window.camEnable = false;
+            window.videoEnable = true;
+        }
+    }
 
     PinchArea {
         width: parent.width
@@ -396,20 +407,14 @@ ApplicationWindow {
                 var deltaY = mouse.y - startY
 
                 if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    videoBtn.rotation += 180;
+                    shutterBtn.rotation += 180;
                     if (deltaX > 0) {
-                        console.log("Swipe right")
+                        
                         window.camEnable = true
                         window.videoEnable = false
-                        console.log("camEnable: " + window.camEnable )
-                        console.log("videoEnable: " + window.videoEnable )
-                        
                     } else {
-                        console.log("Swipe left")
-                        window.camEnable = false
-                        window.videoEnable = true
-                        console.log("camEnable: " + window.camEnable )
-                        console.log("videoEnable: " + window.videoEnable )
-                        
+                        swappingDelay.start()
                     }
                 } else {
                     camera.focus.customFocusPoint = Qt.point(mouse.x / dragArea.width, mouse.y / dragArea.height)
@@ -938,7 +943,7 @@ ApplicationWindow {
     }
 
     Rectangle { // video
-        id: videoBtn
+        id: videoBtnFrame
         height: 100
         width: 100
         radius: 70
@@ -948,7 +953,8 @@ ApplicationWindow {
         visible: window.videoEnable
 
         Button {
-            anchors.fill: videoBtn
+            id: videoBtn
+            anchors.fill: videoBtnFrame
             anchors.centerIn: parent
             enabled: window.videoEnable
 
@@ -968,6 +974,7 @@ ApplicationWindow {
                 height: 40
                 color:  "black"
             }
+
             text: preCaptureTimer.running ? countDown : ""
 
             palette.buttonText: "white"
@@ -998,7 +1005,7 @@ ApplicationWindow {
     }
 
     Rectangle { // camera
-        id: shutterBtn
+        id: shutterBtnFrame
         height: 100
         width: 100
         radius: 70
@@ -1009,6 +1016,7 @@ ApplicationWindow {
         visible: window.camEnable
 
         Button {
+            id: shutterBtn
             anchors.centerIn: parent
             enabled: window.camEnable
 

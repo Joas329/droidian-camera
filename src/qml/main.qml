@@ -231,9 +231,9 @@ ApplicationWindow {
             camera.imageCapture.resolution = camera.firstFourThreeResolution
         }
 
-        // if (settings.cameras[camera.deviceId].resolution == 0) {
-        //     settings.cameras[camera.deviceId].resolution = Math.round((camera.imageCapture.supportedResolutions[0].width * camera.imageCapture.supportedResolutions[0].height) / 1000000)
-        // }
+        if (settings.cameras[camera.deviceId].resolution == 0) {
+            settings.cameras[camera.deviceId].resolution = Math.round((camera.imageCapture.supportedResolutions[0].width * camera.imageCapture.supportedResolutions[0].height) / 1000000)
+        }
     }
 
     Camera {
@@ -371,7 +371,7 @@ ApplicationWindow {
             camera.setDigitalZoom(scale * zoomFactor)
         }
     }
-    
+
     Timer {
         id: swappingDelay
         interval: 400 
@@ -853,7 +853,6 @@ ApplicationWindow {
         enabled: false
     }
 
-
     Rectangle {
         id: menuBtnFrame
         anchors.bottom: parent.bottom
@@ -990,7 +989,7 @@ ApplicationWindow {
                 radius: 50
             }
 
-            onClicked: { // video
+            onClicked: {
                 window.videoState = 1 - window.videoState; 
                 handleVideoRecording()
             }
@@ -1017,6 +1016,7 @@ ApplicationWindow {
 
         Button {
             id: shutterBtn
+            anchors.fill: parent.fill
             anchors.centerIn: parent
             enabled: window.camEnable
 
@@ -1032,7 +1032,6 @@ ApplicationWindow {
             icon.color:  "white"
             icon.width: 100
             icon.height: 100
-            rotation: shutterBtn.pressed ? 180 : 0
             text: preCaptureTimer.running ? countDown : ""
             palette.buttonText: "red"
             font.pixelSize: 64
@@ -1048,6 +1047,7 @@ ApplicationWindow {
             }
 
             onClicked: {
+                shutterBtn.rotation += 180
                 if (optionContainer.state == "opened" && delayTime.currentIndex > 0 && !backCamSelect.visible) {
                         optionContainer.state = "closed"
                         countDown = delayTime.currentIndex

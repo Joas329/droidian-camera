@@ -372,33 +372,57 @@ ApplicationWindow {
         }
     }
 
-    PinchArea {
-        enabled: cslate.state !== "VideoCapture"
-        anchors.fill:parent
+    PinchArea { //Area that controls the focus point and swipeView bar
+        width: parent.width
+        height: parent.height * 0.85
         pinch.target: camZoom
         pinch.maximumScale: camera.maximumDigitalZoom / camZoom.zoomFactor
         pinch.minimumScale: 0
+        
 
         MouseArea {
             id: dragArea
-            hoverEnabled: true
             anchors.fill: parent
-            scrollGestureEnabled: false
 
-            onClicked: {
-                if (cslate.state === "VideoCapture") {
-                    return;
+            property real startX: 0
+            property real startY: 0
+
+            onPressed: {
+                startX = mouse.x
+                startY = mouse.y
+            }
+
+            onReleased: {
+                var deltaX = mouse.x - startX
+                var deltaY = mouse.y - startY
+
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > 0) {
+                        console.log("Swipe right")
+                        window.camEnable = true
+                        window.videoEnable = false
+                        console.log("camEnable: " + window.camEnable )
+                        console.log("videoEnable: " + window.videoEnable )
+                        
+                    } else {
+                        console.log("Swipe left")
+                        window.camEnable = false
+                        window.videoEnable = true
+                        console.log("camEnable: " + window.camEnable )
+                        console.log("videoEnable: " + window.videoEnable )
+                        
+                    }
+                } else {
+                    camera.focus.customFocusPoint = Qt.point(mouse.x / dragArea.width, mouse.y / dragArea.height)
+                    camera.focus.focusMode = Camera.FocusMacro
+                    focusPointRect.width = 60
+                    focusPointRect.height = 60
+                    focusPointRect.visible = true
+                    focusPointRect.x = mouse.x - (focusPointRect.width / 2)
+                    focusPointRect.y = mouse.y - (focusPointRect.height / 2)
+                    visTm.start()
+                    camera.searchAndLock()
                 }
-
-                camera.focus.customFocusPoint = Qt.point(mouse.x / dragArea.width, mouse.y / dragArea.height)
-                camera.focus.focusMode = Camera.FocusMacro
-                focusPointRect.width = 60
-                focusPointRect.height = 60
-                focusPointRect.visible = true
-                focusPointRect.x = mouse.x - (focusPointRect.width / 2)
-                focusPointRect.y = mouse.y - (focusPointRect.height / 2)
-                visTm.start()
-                camera.searchAndLock()
             }
         }
 

@@ -646,31 +646,6 @@ ApplicationWindow {
         }
     }
 
-    Button {
-        id: menuBtn
-        width: 40
-        height: width
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        icon.name: "open-menu-symbolic"
-        icon.color: "white"
-        icon.width: 32
-        icon.height: 32
-        visible: drawer.position == 0.0 && optionContainer.state == "closed"
-
-        background: Rectangle {
-            anchors.fill: parent
-            color: "black"
-            opacity: 0.4
-        }
-
-        onClicked: {
-            if (!mediaView.visible) {
-                drawer.open()
-            }
-        }
-    }
-
     Rectangle {
         id: optionContainer
         width: parent.width
@@ -798,6 +773,7 @@ ApplicationWindow {
         width: parent.width
         edge: Qt.BottomEdge
         dim: true
+
         background: Rectangle {
             anchors.fill: parent
             color: "black"
@@ -864,12 +840,44 @@ ApplicationWindow {
         }
     }
 
-     Rectangle {
+    Rectangle {
+        id: menuBtnFrame
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        height: 60
+        width: 60
+        anchors.rightMargin: 50
+        anchors.bottomMargin: 35
+
+        Button {
+            id: menuBtn
+            anchors.fill: parent
+            icon.name: "open-menu-symbolic"
+            icon.color: "white"
+            icon.width: 32
+            icon.height: 32
+            visible: drawer.position == 0.0 && optionContainer.state == "closed"
+
+            background: Rectangle {
+
+                color: "black"
+                opacity: 0.4
+            }
+
+            onClicked: {
+                if (!mediaView.visible) {
+                    drawer.open()
+                }
+            }
+        }
+    }
+
+    Rectangle {
         id: reviewBtnFrame
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         height: 60
-        radius:90
+        radius: 90
         width: 60
         anchors.leftMargin: 50
         anchors.bottomMargin: 35
@@ -902,7 +910,7 @@ ApplicationWindow {
                 transformOrigin: Item.Center
                 fillMode: Image.PreserveAspectFit
                 smooth: true
-                source:  (window.videoEnable)? mediaView.lastImg : ""
+                source: (window.videoEnable)? mediaView.lastImg : ""
                 scale: Math.min(parent.width / width, parent.height / height)
             }
         }

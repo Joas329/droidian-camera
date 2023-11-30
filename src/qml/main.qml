@@ -942,8 +942,8 @@ ApplicationWindow {
 
     Rectangle { // video
         id: videoBtnFrame
-        height: 100
-        width: 100
+        height: 90
+        width: 90
         radius: 70
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter 
@@ -1003,8 +1003,8 @@ ApplicationWindow {
 
     Rectangle { // camera
         id: shutterBtnFrame
-        height: 100
-        width: 100
+        height: 90
+        width: 90
         radius: 70
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter 
@@ -1028,8 +1028,8 @@ ApplicationWindow {
                                 optionContainer.state == "opened" && delayTime.currentIndex > 0 ? "icons/timer.svg" : "icons/shutter.svg"
 
             icon.color:  "white"
-            icon.width: 100
-            icon.height: 100
+            icon.width: 90
+            icon.height: 90
             text: preCaptureTimer.running ? countDown : ""
             palette.buttonText: "red"
             font.pixelSize: 64
@@ -1038,8 +1038,8 @@ ApplicationWindow {
 
             background: Rectangle {
                 anchors.centerIn: parent
-                width: 100
-                height: 100
+                width: 90
+                height: 90
                 color:  "black"
                 radius: 70
             }

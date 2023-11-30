@@ -1081,4 +1081,65 @@ ApplicationWindow {
         onClosed: camera.start()
         focus: visible
     }
+
+    Rectangle {
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter 
+        width: 400
+        height: 250
+        color: "transparent"
+
+        RowLayout {
+            anchors.centerIn: parent
+            
+            Rectangle {
+                width: 80
+                height: 30
+                radius: 5
+                color: "transparent"
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "Camera"
+                    font.bold: true
+                    color: camEnable ? "orange" : "lightgray"
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (!camEnable){
+                            videoBtn.rotation += 180;
+                            shutterBtn.rotation += 180;
+                        }
+                        camEnable = true
+                        videoEnable = false
+                    }
+                }
+            }
+
+            Rectangle {
+                width: 80
+                height: 30
+                radius: 5
+                color: "transparent"
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "Video"
+                    font.bold: true
+                    color: videoEnable ? "orange" : "lightgray"
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        videoBtn.rotation += 180;
+                        shutterBtn.rotation += 180;
+                        swappingDelay.start()
+                    }
+                }
+            }            
+        }
+    }
 }

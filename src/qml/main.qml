@@ -251,7 +251,7 @@ ApplicationWindow {
         imageProcessing {
             denoisingLevel: 1.0
             sharpeningLevel: 1.0
-            whiteBalanceMode: Camera.WhiteBalanceAuto
+            whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
         }
 
         flash.mode: Camera.FlashOff
@@ -382,7 +382,7 @@ ApplicationWindow {
         }
     }
     Timer {
-        id: blurrDelay
+        id: blurDelay
         interval: 400 
         repeat: false 
 
@@ -418,14 +418,14 @@ ApplicationWindow {
                 if (Math.abs(deltaX) > Math.abs(deltaY)) {
                     if (deltaX > 0 && !window.camEnable) {
                         window.blurView = 1
-                        blurrDelay.start()
+                        blurDelay.start()
                         videoBtn.rotation += 180;
                         shutterBtn.rotation += 180;
                         window.camEnable = true
                         window.videoEnable = false
                     } else if (deltaX < 0 && !window.videoEnable) {
                         window.blurView = 1
-                        blurrDelay.start()
+                        blurDelay.start()
                         videoBtn.rotation += 180;
                         shutterBtn.rotation += 180;
                         swappingDelay.start()
@@ -510,6 +510,7 @@ ApplicationWindow {
                 visible: window.backCameras > 1 && window.videoCaptured == false
 
                 onClicked: {
+                    window.blurView = 1
                     delayTime.visible = false
                     backCamSelect.visible = true
                     drawer.close()
@@ -760,6 +761,7 @@ ApplicationWindow {
                         }
 
                         onClicked: {
+                            window.blurView = 0
                             camera.deviceId = model.cameraId
                             optionContainer.state = "closed"
                         }
@@ -854,11 +856,15 @@ ApplicationWindow {
                 }
 
                 onClicked: {
+                    window.blurView = 1
                     tmDrawer.close()
                     settings.hideTimerInfo = 1
                     settings.setValue("hideTimerInfo", 1);
                 }
             }
+        }
+        onClosed: {
+                window.blurView = 0;
         }
     }
 
@@ -1130,7 +1136,7 @@ ApplicationWindow {
                     onClicked: {
                         if (!camEnable){
                             window.blurView = 1
-                            blurrDelay.start()
+                            blurDelay.start()
                             videoBtn.rotation += 180;
                             shutterBtn.rotation += 180;
                         }
@@ -1158,7 +1164,7 @@ ApplicationWindow {
                     onClicked: {
                         if (!videoEnable){
                             window.blurView = 1
-                            blurrDelay.start()
+                            blurDelay.start()
                             videoBtn.rotation += 180;
                             shutterBtn.rotation += 180;
                             swappingDelay.start()

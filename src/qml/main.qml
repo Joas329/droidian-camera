@@ -5,6 +5,7 @@
 // Bardia Moshiri <fakeshell@bardia.tech>
 // Erik Inkinen <erik.inkinen@gmail.com>
 // Alexander Rutz <alex@familyrutz.com>
+// Joaquin Philco <joaquinphilco@gmail.com>
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
@@ -31,8 +32,6 @@ ApplicationWindow {
     property var backCameras: 0
     property bool camEnable : true
     property bool videoEnable : false
-    property int videoState:  1 //1 --> nonRecording 0--> recording
-
 
     Settings {
         id: settings
@@ -960,7 +959,7 @@ ApplicationWindow {
             Rectangle {
                 anchors.centerIn: parent
                 width: 50
-                visible: window.videoState ? true: false
+                visible: window.videoCaptured ? false : true
                 height: 50
                 color:  "red"
                 radius: 70
@@ -969,7 +968,7 @@ ApplicationWindow {
             Rectangle {
                 anchors.centerIn: parent
                 width: 40
-                visible: !window.videoState ? true: false
+                visible: window.videoCaptured ? true : false
                 height: 40
                 color:  "black"
             }
@@ -990,7 +989,6 @@ ApplicationWindow {
             }
 
             onClicked: {
-                window.videoState = 1 - window.videoState; 
                 handleVideoRecording()
             }
 

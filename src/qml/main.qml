@@ -381,6 +381,15 @@ ApplicationWindow {
             window.videoEnable = true;
         }
     }
+    Timer {
+        id: blurrDelay
+        interval: 400 
+        repeat: false 
+
+        onTriggered: {
+            window.blurView = 0
+        }
+    }
 
     PinchArea {
         width: parent.width
@@ -406,16 +415,21 @@ ApplicationWindow {
                 var deltaY = mouse.y - startY
 
                 if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                    if (deltaX > 0) {
-                        videoBtn.rotation += !window.camEnable ? 180 : 0;
-                        shutterBtn.rotation += !window.camEnable ? 180 : 0;
+                    if (deltaX > 0 && !window.camEnable) {
+                        window.blurView = 1
+                        blurrDelay.start()
+                        videoBtn.rotation += 180;
+                        shutterBtn.rotation += 180;
                         window.camEnable = true
                         window.videoEnable = false
-                    } else {
+                    } else if (deltaX < 0 && !window.videoEnable) {
+                        window.blurView = 1
+                        blurrDelay.start()
                         videoBtn.rotation += 180;
                         shutterBtn.rotation += 180;
                         swappingDelay.start()
                     }
+                    
                 } else {
                     camera.focus.customFocusPoint = Qt.point(mouse.x / dragArea.width, mouse.y / dragArea.height)
                     camera.focus.focusMode = Camera.FocusMacro
@@ -1108,6 +1122,8 @@ ApplicationWindow {
                     anchors.fill: parent
                     onClicked: {
                         if (!camEnable){
+                            window.blurView = 1
+                            blurrDelay.start()
                             videoBtn.rotation += 180;
                             shutterBtn.rotation += 180;
                         }
@@ -1133,9 +1149,13 @@ ApplicationWindow {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        videoBtn.rotation += 180;
-                        shutterBtn.rotation += 180;
-                        swappingDelay.start()
+                        if (!videoEnable){
+                            window.blurView = 1
+                            blurrDelay.start()
+                            videoBtn.rotation += 180;
+                            shutterBtn.rotation += 180;
+                            swappingDelay.start()
+                        }
                     }
                 }
             }            

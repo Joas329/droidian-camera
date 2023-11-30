@@ -1109,7 +1109,8 @@ ApplicationWindow {
 
         RowLayout {
             anchors.centerIn: parent
-            
+            visible: !mediaView.visible
+            enabled: !mediaView.visible
             Rectangle {
                 width: 80
                 height: 30

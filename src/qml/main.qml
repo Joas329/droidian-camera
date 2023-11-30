@@ -230,9 +230,9 @@ ApplicationWindow {
             camera.imageCapture.resolution = camera.firstFourThreeResolution
         }
 
-        if (settings.cameras[camera.deviceId].resolution == 0) {
-            settings.cameras[camera.deviceId].resolution = Math.round((camera.imageCapture.supportedResolutions[0].width * camera.imageCapture.supportedResolutions[0].height) / 1000000)
-        }
+        // if (settings.cameras[camera.deviceId].resolution == 0) {
+        //     settings.cameras[camera.deviceId].resolution = Math.round((camera.imageCapture.supportedResolutions[0].width * camera.imageCapture.supportedResolutions[0].height) / 1000000)
+        // }
     }
 
     Camera {
@@ -406,13 +406,14 @@ ApplicationWindow {
                 var deltaY = mouse.y - startY
 
                 if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                    videoBtn.rotation += 180;
-                    shutterBtn.rotation += 180;
                     if (deltaX > 0) {
-                        
+                        videoBtn.rotation += !window.camEnable ? 180 : 0;
+                        shutterBtn.rotation += !window.camEnable ? 180 : 0;
                         window.camEnable = true
                         window.videoEnable = false
                     } else {
+                        videoBtn.rotation += 180;
+                        shutterBtn.rotation += 180;
                         swappingDelay.start()
                     }
                 } else {

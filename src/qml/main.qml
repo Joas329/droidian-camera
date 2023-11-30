@@ -381,6 +381,7 @@ ApplicationWindow {
             window.videoEnable = true;
         }
     }
+
     Timer {
         id: blurDelay
         interval: 400 
@@ -419,18 +420,17 @@ ApplicationWindow {
                     if (deltaX > 0 && !window.camEnable) {
                         window.blurView = 1
                         blurDelay.start()
-                        videoBtn.rotation += 180;
-                        shutterBtn.rotation += 180;
+                        videoBtn.rotation += 360;
+                        shutterBtn.rotation += 360;
                         window.camEnable = true
                         window.videoEnable = false
                     } else if (deltaX < 0 && !window.videoEnable) {
                         window.blurView = 1
                         blurDelay.start()
-                        videoBtn.rotation += 180;
-                        shutterBtn.rotation += 180;
+                        videoBtn.rotation += 360;
+                        shutterBtn.rotation += 360;
                         swappingDelay.start()
                     }
-                    
                 } else {
                     camera.focus.customFocusPoint = Qt.point(mouse.x / dragArea.width, mouse.y / dragArea.height)
                     camera.focus.focusMode = Camera.FocusMacro
@@ -484,9 +484,11 @@ ApplicationWindow {
 
                 onClicked: {
                     if (camera.position === Camera.BackFace) {
+                        window.blurView = 0
                         drawer.close()
                         camera.position = Camera.FrontFace;
                     } else if (camera.position === Camera.FrontFace) {
+                        window.blurView = 0
                         drawer.close()
                         camera.position = Camera.BackFace;
                     }
@@ -510,7 +512,7 @@ ApplicationWindow {
                 visible: window.backCameras > 1 && window.videoCaptured == false
 
                 onClicked: {
-                    window.blurView = 1
+                    window.blurView = 0
                     delayTime.visible = false
                     backCamSelect.visible = true
                     drawer.close()
@@ -626,11 +628,13 @@ ApplicationWindow {
 
                 onClicked: {
                     if (!camera.aspWide) {
+                        window.blurView = 0;
                         drawer.close()
                         camera.aspWide = 1;
                         camera.imageCapture.resolution = camera.firstSixteenNineResolution
                     } else {
                         drawer.close()
+                        window.blurView = 0;
                         camera.aspWide = 0;
                         camera.imageCapture.resolution = camera.firstFourThreeResolution
                     }
@@ -761,7 +765,7 @@ ApplicationWindow {
                         }
 
                         onClicked: {
-                            window.blurView = 0
+                            window.blurView = 1
                             camera.deviceId = model.cameraId
                             optionContainer.state = "closed"
                         }
@@ -926,8 +930,8 @@ ApplicationWindow {
             height: parent.height
             radius: 90
             color: "black" 
-
             layer.enabled: true
+
             layer.effect: OpacityMask {
                 maskSource: Item {
                     width: reviewBtn.width
@@ -1044,11 +1048,9 @@ ApplicationWindow {
             anchors.fill: parent.fill
             anchors.centerIn: parent
             enabled: window.camEnable
-
             icon.name: preCaptureTimer.running ? "" :
                             optionContainer.state == "opened" && delayTime.currentIndex < 1 ||
                             optionContainer.state == "opened" && backCamSelect.visible ? "window-close-symbolic" :
-                            !window.videoCaptured ? "media-record-symbolic" :
                             window.videoCaptured ? "media-playback-stop-symbolic" : "shutter"
             
             icon.source: preCaptureTimer.running ? "" :
@@ -1072,7 +1074,7 @@ ApplicationWindow {
             }
 
             onClicked: {
-                shutterBtn.rotation += 180
+                shutterBtn.rotation += 360
                 if (optionContainer.state == "opened" && delayTime.currentIndex > 0 && !backCamSelect.visible) {
                         optionContainer.state = "closed"
                         countDown = delayTime.currentIndex
@@ -1137,8 +1139,8 @@ ApplicationWindow {
                         if (!camEnable){
                             window.blurView = 1
                             blurDelay.start()
-                            videoBtn.rotation += 180;
-                            shutterBtn.rotation += 180;
+                            videoBtn.rotation += 360;
+                            shutterBtn.rotation += 360;
                         }
                         camEnable = true
                         videoEnable = false
@@ -1165,8 +1167,8 @@ ApplicationWindow {
                         if (!videoEnable){
                             window.blurView = 1
                             blurDelay.start()
-                            videoBtn.rotation += 180;
-                            shutterBtn.rotation += 180;
+                            videoBtn.rotation += 360;
+                            shutterBtn.rotation += 360;
                             swappingDelay.start()
                         }
                     }

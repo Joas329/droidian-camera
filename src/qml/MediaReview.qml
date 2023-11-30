@@ -18,7 +18,7 @@ Rectangle {
     property int index: -1
     property var lastImg: index == -1 ? "" : imgModel.get(viewRect.index, "fileUrl")
     property string currentFileUrl: viewRect.index === -1 || imgModel.get(viewRect.index, "fileUrl") === undefined ? "" : imgModel.get(viewRect.index, "fileUrl").toString()
-    property var folder: cslate.state == "VideoCapture" ?
+    property var folder: window.videoEnable ?
                          StandardPaths.writableLocation(StandardPaths.MoviesLocation) + "/droidian-camera" :
                          StandardPaths.writableLocation(StandardPaths.PicturesLocation) + "/droidian-camera"
     signal closed
@@ -37,12 +37,12 @@ Rectangle {
         id: imgModel
         folder: viewRect.folder
         showDirs: false
-        nameFilters: cslate.state == "VideoCapture" ? ["*.mkv"] : ["*.jpg"]
+        nameFilters: window.videoEnable ? ["*.mkv"] : ["*.jpg"]
 
         onStatusChanged: {
             if (imgModel.status == FolderListModel.Ready) {
                 viewRect.index = imgModel.count - 1
-                if (cslate.state == "VideoCapture" && viewRect.currentFileUrl.endsWith(".mkv")) {
+                if (window.videoEnable && viewRect.currentFileUrl.endsWith(".mkv")) {
                     thumbnailGenerator.setVideoSource(viewRect.currentFileUrl)
                 } else {
                     viewRect.lastImg = viewRect.currentFileUrl

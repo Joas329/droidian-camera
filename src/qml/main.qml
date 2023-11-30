@@ -662,6 +662,9 @@ ApplicationWindow {
                 }
             }
         }
+        onClosed: {
+                window.blurView = 0;
+        }
     }
 
     Rectangle {
@@ -873,6 +876,7 @@ ApplicationWindow {
         anchors.right: parent.right
         height: 60
         width: 60
+        color: "transparent"
         anchors.rightMargin: 50
         anchors.bottomMargin: 35
 
@@ -892,6 +896,7 @@ ApplicationWindow {
 
             onClicked: {
                 if (!mediaView.visible) {
+                    window.blurView = 1
                     drawer.open()
                 }
             }
@@ -936,7 +941,7 @@ ApplicationWindow {
                 transformOrigin: Item.Center
                 fillMode: Image.PreserveAspectFit
                 smooth: true
-                source: (window.videoEnable)? mediaView.lastImg : ""
+                source: (!window.videoEnable)? mediaView.lastImg : ""
                 scale: Math.min(parent.width / width, parent.height / height)
             }
         }

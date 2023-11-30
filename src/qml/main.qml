@@ -397,11 +397,12 @@ ApplicationWindow {
         pinch.target: camZoom
         pinch.maximumScale: camera.maximumDigitalZoom / camZoom.zoomFactor
         pinch.minimumScale: 0
+        enabled: !mediaView.visible
 
         MouseArea {
             id: dragArea
             anchors.fill: parent
-
+            enabled: !mediaView.visible
             property real startX: 0
             property real startY: 0
 
@@ -1104,7 +1105,7 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter 
         width: 400
-        height: 250
+        height: 270
         color: "transparent"
 
         RowLayout {

@@ -230,9 +230,9 @@ ApplicationWindow {
             camera.imageCapture.resolution = camera.firstFourThreeResolution
         }
 
-        // if (settings.cameras[camera.deviceId].resolution == 0) {
-        //     settings.cameras[camera.deviceId].resolution = Math.round((camera.imageCapture.supportedResolutions[0].width * camera.imageCapture.supportedResolutions[0].height) / 1000000)
-        // }
+        if (settings.cameras[camera.deviceId].resolution == 0) {
+            settings.cameras[camera.deviceId].resolution = Math.round((camera.imageCapture.supportedResolutions[0].width * camera.imageCapture.supportedResolutions[0].height) / 1000000)
+        }
     }
 
     Camera {
@@ -420,15 +420,15 @@ ApplicationWindow {
                     if (deltaX > 0 && !window.camEnable) {
                         window.blurView = 1
                         blurDelay.start()
-                        videoBtn.rotation += 360;
-                        shutterBtn.rotation += 360;
+                        videoBtn.rotation += 180;
+                        shutterBtn.rotation += 180;
                         window.camEnable = true
                         window.videoEnable = false
                     } else if (deltaX < 0 && !window.videoEnable) {
                         window.blurView = 1
                         blurDelay.start()
-                        videoBtn.rotation += 360;
-                        shutterBtn.rotation += 360;
+                        videoBtn.rotation += 180;
+                        shutterBtn.rotation += 180;
                         swappingDelay.start()
                     }
                 } else {
@@ -1059,9 +1059,10 @@ ApplicationWindow {
             icon.color:  "white"
             icon.width: 90
             icon.height: 90
+            rotation: shutterBtn.rotation == 180 ? 0 : 0 
             text: preCaptureTimer.running ? countDown : ""
             palette.buttonText: "red"
-            font.pixelSize: 64
+            font.pixelSize: 64 
             font.bold: true
             visible: true
 
@@ -1074,17 +1075,17 @@ ApplicationWindow {
             }
 
             onClicked: {
-                shutterBtn.rotation += 360
+                shutterBtn.rotation += optionContainer.state == "opened" ? 0 : 180
                 if (optionContainer.state == "opened" && delayTime.currentIndex > 0 && !backCamSelect.visible) {
-                        optionContainer.state = "closed"
-                        countDown = delayTime.currentIndex
-                        preCaptureTimer.start()
-                    } else if (optionContainer.state == "opened" && delayTime.currentIndex < 1 || 
-                                    optionContainer.state == "opened" && backCamSelect.visible) {
-                        optionContainer.state = "closed"
-                    } else  {
-                        camera.imageCapture.capture()
-                    }
+                    optionContainer.state = "closed"
+                    countDown = delayTime.currentIndex
+                    preCaptureTimer.start()
+                } else if (optionContainer.state == "opened" && delayTime.currentIndex < 1 || 
+                            optionContainer.state == "opened" && backCamSelect.visible) {
+                    optionContainer.state = "closed"
+                } else  {
+                    camera.imageCapture.capture()
+                }
             }
 
             onPressAndHold: {
@@ -1139,8 +1140,8 @@ ApplicationWindow {
                         if (!camEnable){
                             window.blurView = 1
                             blurDelay.start()
-                            videoBtn.rotation += 360;
-                            shutterBtn.rotation += 360;
+                            videoBtn.rotation += 180;
+                            shutterBtn.rotation += 180;
                         }
                         camEnable = true
                         videoEnable = false
@@ -1167,8 +1168,8 @@ ApplicationWindow {
                         if (!videoEnable){
                             window.blurView = 1
                             blurDelay.start()
-                            videoBtn.rotation += 360;
-                            shutterBtn.rotation += 360;
+                            videoBtn.rotation += 180;
+                            shutterBtn.rotation += 180;
                             swappingDelay.start()
                         }
                     }

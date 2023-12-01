@@ -230,9 +230,9 @@ ApplicationWindow {
             camera.imageCapture.resolution = camera.firstFourThreeResolution
         }
 
-        if (settings.cameras[camera.deviceId].resolution == 0) {
-            settings.cameras[camera.deviceId].resolution = Math.round((camera.imageCapture.supportedResolutions[0].width * camera.imageCapture.supportedResolutions[0].height) / 1000000)
-        }
+        // if (settings.cameras[camera.deviceId].resolution == 0) {
+        //     settings.cameras[camera.deviceId].resolution = Math.round((camera.imageCapture.supportedResolutions[0].width * camera.imageCapture.supportedResolutions[0].height) / 1000000)
+        // }
     }
 
     Camera {
@@ -393,6 +393,7 @@ ApplicationWindow {
     }
 
     PinchArea {
+        id: pinchArea
         width: parent.width
         height: parent.height * 0.85
         pinch.target: camZoom
@@ -580,6 +581,7 @@ ApplicationWindow {
                 }
 
                 onClicked: {
+                    window.blurView = 0
                     if (camera.position !== Camera.FrontFace) {
                         if (flashButton.state == "flashOff") {
                             flashButton.state = "flashOn"
@@ -658,6 +660,7 @@ ApplicationWindow {
                 }
 
                 onClicked: {
+                    window.blurView = 0;
                     if (soundButton.soundOn == 1) {
                         soundButton.soundOn = 0
                         settings.setValue("soundOn", 0)
@@ -669,7 +672,7 @@ ApplicationWindow {
             }
         }
         onClosed: {
-                window.blurView = 0;
+            window.blurView = 0;
         }
     }
 
@@ -765,7 +768,7 @@ ApplicationWindow {
                         }
 
                         onClicked: {
-                            window.blurView = 1
+                            window.blurView = 0
                             camera.deviceId = model.cameraId
                             optionContainer.state = "closed"
                         }
@@ -1075,6 +1078,8 @@ ApplicationWindow {
             }
 
             onClicked: {
+                pinchArea.enabled = true
+                window.blurView = 0
                 shutterBtn.rotation += optionContainer.state == "opened" ? 0 : 180
                 if (optionContainer.state == "opened" && delayTime.currentIndex > 0 && !backCamSelect.visible) {
                     optionContainer.state = "closed"
@@ -1089,6 +1094,8 @@ ApplicationWindow {
             }
 
             onPressAndHold: {
+                pinchArea.enabled = false
+                window.blurView = 1
                 delayTime.visible = true
                 backCamSelect.visible = false
                 optionContainer.state = "opened"

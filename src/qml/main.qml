@@ -485,11 +485,9 @@ ApplicationWindow {
 
                 onClicked: {
                     if (camera.position === Camera.BackFace) {
-                        window.blurView = 0
                         drawer.close()
                         camera.position = Camera.FrontFace;
                     } else if (camera.position === Camera.FrontFace) {
-                        window.blurView = 0
                         drawer.close()
                         camera.position = Camera.BackFace;
                     }
@@ -513,10 +511,10 @@ ApplicationWindow {
                 visible: window.backCameras > 1 && window.videoCaptured == false
 
                 onClicked: {
-                    window.blurView = 0
                     delayTime.visible = false
                     backCamSelect.visible = true
                     drawer.close()
+                    window.blurView = 1
                     optionContainer.state = "opened"
                 }
             }
@@ -581,7 +579,6 @@ ApplicationWindow {
                 }
 
                 onClicked: {
-                    window.blurView = 0
                     if (camera.position !== Camera.FrontFace) {
                         if (flashButton.state == "flashOff") {
                             flashButton.state = "flashOn"
@@ -630,13 +627,11 @@ ApplicationWindow {
 
                 onClicked: {
                     if (!camera.aspWide) {
-                        window.blurView = 0;
                         drawer.close()
                         camera.aspWide = 1;
                         camera.imageCapture.resolution = camera.firstSixteenNineResolution
                     } else {
                         drawer.close()
-                        window.blurView = 0;
                         camera.aspWide = 0;
                         camera.imageCapture.resolution = camera.firstFourThreeResolution
                     }
@@ -660,7 +655,6 @@ ApplicationWindow {
                 }
 
                 onClicked: {
-                    window.blurView = 0;
                     if (soundButton.soundOn == 1) {
                         soundButton.soundOn = 0
                         settings.setValue("soundOn", 0)
@@ -1062,7 +1056,6 @@ ApplicationWindow {
             icon.color:  "white"
             icon.width: 90
             icon.height: 90
-            rotation: shutterBtn.rotation == 180 ? 0 : 0 
             text: preCaptureTimer.running ? countDown : ""
             palette.buttonText: "red"
             font.pixelSize: 64 
@@ -1094,6 +1087,7 @@ ApplicationWindow {
             }
 
             onPressAndHold: {
+                shutterBtn.rotation = 0;
                 pinchArea.enabled = false
                 window.blurView = 1
                 delayTime.visible = true
@@ -1103,8 +1097,9 @@ ApplicationWindow {
 
             Behavior on rotation {
                 RotationAnimation { 
-                    duration: 250
-                    direction: RotationAnimation.Counterclockwise
+                    duration: delayTime ? 0 : 250
+                    direction: RotationAnimation.Counterclockwise;
+                    
                 }
             }
         }

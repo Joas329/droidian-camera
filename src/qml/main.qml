@@ -1086,18 +1086,19 @@ ApplicationWindow {
                 }
             }
 
-            onPressAndHold: {
-                shutterBtn.rotation = 0;
+            onPressAndHold: {   
+                optionContainer.state = "opened"
                 pinchArea.enabled = false
                 window.blurView = 1
+                shutterBtn.rotation = 0
                 delayTime.visible = true
                 backCamSelect.visible = false
-                optionContainer.state = "opened"
+                
             }
 
             Behavior on rotation {
                 RotationAnimation { 
-                    duration: delayTime ? 0 : 250
+                    duration: (shutterBtn.rotation == 180  && optionContainer.state == "opened") ? 0 : 250
                     direction: RotationAnimation.Counterclockwise;
                     
                 }

@@ -511,10 +511,11 @@ ApplicationWindow {
                 visible: window.backCameras > 1 && window.videoCaptured == false
 
                 onClicked: {
+                    window.blurView = 1
                     delayTime.visible = false
                     backCamSelect.visible = true
                     drawer.close()
-                    window.blurView = 1
+                    
                     optionContainer.state = "opened"
                 }
             }
@@ -666,7 +667,7 @@ ApplicationWindow {
             }
         }
         onClosed: {
-            window.blurView = 0;
+            window.blurView = backCamSelect.visible ? 1 : 0
         }
     }
 

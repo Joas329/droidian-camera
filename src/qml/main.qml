@@ -30,8 +30,6 @@ ApplicationWindow {
     property var useFlash: 0
     property var frontCameras: 0
     property var backCameras: 0
-    property bool camEnable : true
-    property bool videoEnable : false
 
     Settings {
         id: settings
@@ -351,7 +349,6 @@ ApplicationWindow {
         } else {
             camGst.stop();
             window.videoCaptured = false;
-
             camera.cameraState = Camera.UnloadedState;
             camera.start();
         }
@@ -377,17 +374,9 @@ ApplicationWindow {
         repeat: false 
 
         onTriggered: {
-            window.camEnable = false;
-            window.videoEnable = true;
-        }
-    }
-
-    Timer {
-        id: blurDelay
-        interval: 400 
-        repeat: false 
-
-        onTriggered: {
+            videoBtn.rotation += 180;
+            shutterBtn.rotation += 180;
+            cslate.state = (cslate.state == "VideoCapture") ? "PhotoCapture" : "VideoCapture"
             window.blurView = 0
         }
     }
@@ -418,16 +407,11 @@ ApplicationWindow {
                 var deltaY = mouse.y - startY
 
                 if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                    if (deltaX > 0 && !window.camEnable) {
+                    if (deltaX > 0 && cslate.state != "PhotoCapture") {
                         window.blurView = 1
-                        blurDelay.start()
-                        videoBtn.rotation += 180;
-                        shutterBtn.rotation += 180;
-                        window.camEnable = true
-                        window.videoEnable = false
-                    } else if (deltaX < 0 && !window.videoEnable) {
+                        swappingDelay.start()
+                    } else if (deltaX < 0 && cslate.state != "VideoCapture") {
                         window.blurView = 1
-                        blurDelay.start()
                         videoBtn.rotation += 180;
                         shutterBtn.rotation += 180;
                         swappingDelay.start()
@@ -515,7 +499,6 @@ ApplicationWindow {
                     delayTime.visible = false
                     backCamSelect.visible = true
                     drawer.close()
-                    
                     optionContainer.state = "opened"
                 }
             }
@@ -950,7 +933,7 @@ ApplicationWindow {
                 transformOrigin: Item.Center
                 fillMode: Image.PreserveAspectFit
                 smooth: true
-                source: (!window.videoEnable)? mediaView.lastImg : ""
+                source: (cslate.state == "PhotoCapture")? mediaView.lastImg : ""
                 scale: Math.min(parent.width / width, parent.height / height)
             }
         }
@@ -977,13 +960,12 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter 
         anchors.bottomMargin: 15  
-        visible: window.videoEnable
-
+        visible: cslate.state == "VideoCapture"
         Button {
             id: videoBtn
             anchors.fill: videoBtnFrame
             anchors.centerIn: parent
-            enabled: window.videoEnable
+            enabled: cslate.state == "VideoCapture"
 
             Rectangle {
                 anchors.centerIn: parent
@@ -1039,17 +1021,17 @@ ApplicationWindow {
         anchors.horizontalCenter: parent.horizontalCenter 
         anchors.bottomMargin: 15  
         
-        visible: window.camEnable
+        visible: cslate.state == "PhotoCapture"
 
         Button {
             id: shutterBtn
             anchors.fill: parent.fill
             anchors.centerIn: parent
-            enabled: window.camEnable
+            enabled: cslate.state == "PhotoCapture"
             icon.name: preCaptureTimer.running ? "" :
                             optionContainer.state == "opened" && delayTime.currentIndex < 1 ||
                             optionContainer.state == "opened" && backCamSelect.visible ? "window-close-symbolic" :
-                            window.videoCaptured ? "media-playback-stop-symbolic" : "shutter"
+                            cslate.state == "VideoCapture" ? "media-playback-stop-symbolic" : "shutter"
             
             icon.source: preCaptureTimer.running ? "" :
                                 optionContainer.state == "opened" && delayTime.currentIndex > 0 ? "icons/timer.svg" : "icons/shutter.svg"
@@ -1099,9 +1081,8 @@ ApplicationWindow {
 
             Behavior on rotation {
                 RotationAnimation { 
-                    duration: (shutterBtn.rotation == 180  && optionContainer.state == "opened") ? 0 : 250
+                    duration: (shutterBtn.rotation >= 180  && optionContainer.state == "opened") ? 0 : 250
                     direction: RotationAnimation.Counterclockwise;
-                    
                 }
             }
         }
@@ -1135,20 +1116,16 @@ ApplicationWindow {
                     anchors.centerIn: parent
                     text: "Camera"
                     font.bold: true
-                    color: camEnable ? "orange" : "lightgray"
+                    color: cslate.state == "PhotoCapture" ? "orange" : "lightgray"
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (!camEnable){
+                        if (cslate.state != "PhotoCapture"){
                             window.blurView = 1
-                            blurDelay.start()
-                            videoBtn.rotation += 180;
-                            shutterBtn.rotation += 180;
+                            swappingDelay.start()
                         }
-                        camEnable = true
-                        videoEnable = false
                     }
                 }
             }
@@ -1163,15 +1140,14 @@ ApplicationWindow {
                     anchors.centerIn: parent
                     text: "Video"
                     font.bold: true
-                    color: videoEnable ? "orange" : "lightgray"
+                    color: cslate.state == "VideoCapture" ? "orange" : "lightgray"
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (!videoEnable){
+                        if (cslate.state != "VideoCapture"){
                             window.blurView = 1
-                            blurDelay.start()
                             videoBtn.rotation += 180;
                             shutterBtn.rotation += 180;
                             swappingDelay.start()

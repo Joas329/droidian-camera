@@ -370,8 +370,8 @@ ApplicationWindow {
 
     Timer {
         id: swappingDelay
-        interval: 400 
-        repeat: false 
+        interval: 400
+        repeat: false
 
         onTriggered: {
             videoBtn.rotation += 180;
@@ -412,8 +412,8 @@ ApplicationWindow {
                         swappingDelay.start()
                     } else if (deltaX < 0 && cslate.state != "VideoCapture") {
                         window.blurView = 1
-                        videoBtn.rotation += 180;
-                        shutterBtn.rotation += 180;
+                        videoBtn.rotation += 180
+                        shutterBtn.rotation += 180
                         swappingDelay.start()
                     }
                 } else {
@@ -849,7 +849,7 @@ ApplicationWindow {
             }
         }
         onClosed: {
-                window.blurView = 0;
+                window.blurView = 0
         }
     }
 
@@ -910,7 +910,7 @@ ApplicationWindow {
             width: parent.width
             height: parent.height
             radius: 90
-            color: "black" 
+            color: "black"
             layer.enabled: true
 
             layer.effect: OpacityMask {
@@ -947,7 +947,7 @@ ApplicationWindow {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: mediaView.visible = true;
+                onClicked: mediaView.visible = true
             }
         }
     }
@@ -958,8 +958,8 @@ ApplicationWindow {
         width: 90
         radius: 70
         anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter 
-        anchors.bottomMargin: 15  
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin: 15
         visible: cslate.state == "VideoCapture"
         Button {
             id: videoBtn
@@ -981,7 +981,7 @@ ApplicationWindow {
                 visible: window.videoCaptured ? true : false
                 width: videoBtnFrame.width - 50
                 height: videoBtnFrame.height - 50
-                color:  "black"
+                color: "black"
             }
 
             text: preCaptureTimer.running ? countDown : ""
@@ -995,7 +995,7 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 width: videoBtnFrame.width - 20
                 height: videoBtnFrame.height - 20
-                color:  "white"
+                color: "white"
                 radius: videoBtnFrame.radius - 20
             }
 
@@ -1004,7 +1004,7 @@ ApplicationWindow {
             }
 
             Behavior on rotation {
-                RotationAnimation { 
+                RotationAnimation {
                     duration: 250
                     direction: RotationAnimation.Counterclockwise
                 }
@@ -1018,8 +1018,8 @@ ApplicationWindow {
         width: 90
         radius: 70
         anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter 
-        anchors.bottomMargin: 15  
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin: 15
         
         visible: cslate.state == "PhotoCapture"
 
@@ -1036,7 +1036,7 @@ ApplicationWindow {
             icon.source: preCaptureTimer.running ? "" :
                                 optionContainer.state == "opened" && delayTime.currentIndex > 0 ? "icons/timer.svg" : "icons/shutter.svg"
 
-            icon.color:  "white"
+            icon.color: "white"
             icon.width: shutterBtnFrame.width
             icon.height: shutterBtnFrame.height
             text: preCaptureTimer.running ? countDown : ""
@@ -1049,7 +1049,7 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 width: shutterBtnFrame.width
                 height: shutterBtnFrame.height
-                color:  "black"
+                color: "black"
                 radius: shutterBtnFrame.radius
             }
 
@@ -1064,12 +1064,12 @@ ApplicationWindow {
                 } else if (optionContainer.state == "opened" && delayTime.currentIndex < 1 || 
                             optionContainer.state == "opened" && backCamSelect.visible) {
                     optionContainer.state = "closed"
-                } else  {
+                } else {
                     camera.imageCapture.capture()
                 }
             }
 
-            onPressAndHold: {   
+            onPressAndHold: {
                 optionContainer.state = "opened"
                 pinchArea.enabled = false
                 window.blurView = 1
@@ -1080,8 +1080,8 @@ ApplicationWindow {
 
             Behavior on rotation {
                 RotationAnimation { 
-                    duration: (shutterBtn.rotation >= 180  && optionContainer.state == "opened") ? 0 : 250
-                    direction: RotationAnimation.Counterclockwise;
+                    duration: (shutterBtn.rotation >= 180 && optionContainer.state == "opened") ? 0 : 250
+                    direction: RotationAnimation.Counterclockwise
                 }
             }
         }
@@ -1096,7 +1096,7 @@ ApplicationWindow {
 
     Rectangle {
         anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter 
+        anchors.horizontalCenter: parent.horizontalCenter
         width: 400
         height: 270
         color: "transparent"
@@ -1147,13 +1147,13 @@ ApplicationWindow {
                     onClicked: {
                         if (cslate.state != "VideoCapture"){
                             window.blurView = 1
-                            videoBtn.rotation += 180;
-                            shutterBtn.rotation += 180;
+                            videoBtn.rotation += 180
+                            shutterBtn.rotation += 180
                             swappingDelay.start()
                         }
                     }
                 }
-            }            
+            }
         }
     }
 }

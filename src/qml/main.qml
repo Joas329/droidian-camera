@@ -969,18 +969,18 @@ ApplicationWindow {
 
             Rectangle {
                 anchors.centerIn: parent
-                width: 50
+                width: videoBtnFrame.width - 40
+                height: videoBtnFrame.height - 40
+                color: "red"
+                radius: videoBtnFrame.radius
                 visible: window.videoCaptured ? false : true
-                height: 50
-                color:  "red"
-                radius: 70
             }
 
             Rectangle {
                 anchors.centerIn: parent
-                width: 40
                 visible: window.videoCaptured ? true : false
-                height: 40
+                width: videoBtnFrame.width - 50
+                height: videoBtnFrame.height - 50
                 color:  "black"
             }
 
@@ -993,10 +993,10 @@ ApplicationWindow {
 
             background: Rectangle {
                 anchors.centerIn: parent
-                width: 70
-                height: 70
+                width: videoBtnFrame.width - 20
+                height: videoBtnFrame.height - 20
                 color:  "white"
-                radius: 50
+                radius: videoBtnFrame.radius - 20
             }
 
             onClicked: {
@@ -1037,8 +1037,8 @@ ApplicationWindow {
                                 optionContainer.state == "opened" && delayTime.currentIndex > 0 ? "icons/timer.svg" : "icons/shutter.svg"
 
             icon.color:  "white"
-            icon.width: 90
-            icon.height: 90
+            icon.width: shutterBtnFrame.width
+            icon.height: shutterBtnFrame.height
             text: preCaptureTimer.running ? countDown : ""
             palette.buttonText: "red"
             font.pixelSize: 64 
@@ -1047,10 +1047,10 @@ ApplicationWindow {
 
             background: Rectangle {
                 anchors.centerIn: parent
-                width: 90
-                height: 90
+                width: shutterBtnFrame.width
+                height: shutterBtnFrame.height
                 color:  "black"
-                radius: 70
+                radius: shutterBtnFrame.radius
             }
 
             onClicked: {
@@ -1076,7 +1076,6 @@ ApplicationWindow {
                 shutterBtn.rotation = 0
                 delayTime.visible = true
                 backCamSelect.visible = false
-                
             }
 
             Behavior on rotation {
